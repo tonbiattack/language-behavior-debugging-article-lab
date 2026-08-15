@@ -6,6 +6,7 @@
 dist/
 build/
 *.dist
+spring-service/target/
 
 # Environment variables
 .env

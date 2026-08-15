@@ -1,0 +1,35 @@
+services:
+  redis:
+    image: redis:7.4-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
+
+  spring-cache:
+    build:
+      context: ./spring-service
+    environment:
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+    depends_on:
+      - redis
+
+  gateway:
+    build:
+      context: .
+      dockerfile: docker/node.Dockerfile
+    environment:
+      NODE_ENV: production
+      REDIS_SERVICE_URL: http://spring-cache:8081
+      DATABASE_URL: ${DATABASE_URL:?Set DATABASE_URL before starting the stack}
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET before starting the stack}
+      OAUTH_SERVER_URL: ${OAUTH_SERVER_URL:?Set OAUTH_SERVER_URL before starting the stack}
+      VITE_APP_ID: ${VITE_APP_ID:?Set VITE_APP_ID before starting the stack}
+      VITE_OAUTH_PORTAL_URL: ${VITE_OAUTH_PORTAL_URL:?Set VITE_OAUTH_PORTAL_URL before starting the stack}
+    ports:
+      - "3000:3000"
+    depends_on:
+      - spring-cache
+
+volumes:
+  redis-data:

@@ -21,15 +21,17 @@ import {
 } from "@/components/ui/sidebar";
 import { startLogin } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
-import { LayoutDashboard, LogOut, PanelLeft, Users } from "lucide-react";
+import { BookOpenText, Bug, DatabaseZap, LayoutDashboard, LogOut, PanelLeft, PlusCircle } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { DashboardLayoutSkeleton } from './DashboardLayoutSkeleton';
 import { Button } from "./ui/button";
 
 const menuItems = [
-  { icon: LayoutDashboard, label: "Page 1", path: "/" },
-  { icon: Users, label: "Page 2", path: "/some-path" },
+  { icon: LayoutDashboard, label: "Overview", path: "/" },
+  { icon: BookOpenText, label: "Article Library", path: "/articles" },
+  { icon: PlusCircle, label: "New insight", path: "/articles/new" },
+  { icon: DatabaseZap, label: "Cache Console", path: "/cache" },
 ];
 
 const SIDEBAR_WIDTH_KEY = "sidebar-width";
@@ -62,10 +64,10 @@ export default function DashboardLayout({
         <div className="flex flex-col items-center gap-8 p-8 max-w-md w-full">
           <div className="flex flex-col items-center gap-6">
             <h1 className="text-2xl font-semibold tracking-tight text-center">
-              Sign in to continue
+              Continue to DebugLab
             </h1>
             <p className="text-sm text-muted-foreground text-center max-w-sm">
-              Access to this dashboard requires authentication. Continue to launch the login flow.
+              記事の作成・キャッシュ管理・知見の共有にはサインインが必要です。
             </p>
           </div>
           <Button
@@ -73,7 +75,7 @@ export default function DashboardLayout({
             size="lg"
             className="w-full shadow-lg hover:shadow-xl transition-all"
           >
-            Sign in
+              Sign in to DebugLab
           </Button>
         </div>
       </div>
@@ -168,8 +170,9 @@ function DashboardLayoutContent({
               </button>
               {!isCollapsed ? (
                 <div className="flex items-center gap-2 min-w-0">
-                  <span className="font-semibold tracking-tight truncate">
-                    Navigation
+                  <span className="flex items-center gap-2 font-semibold tracking-tight truncate">
+                    <span className="grid h-6 w-6 place-items-center rounded-md bg-[#263950] text-[#f2d486]"><Bug className="h-3.5 w-3.5" /></span>
+                    <span>DebugLab</span>
                   </span>
                 </div>
               ) : null}
@@ -186,7 +189,7 @@ function DashboardLayoutContent({
                       isActive={isActive}
                       onClick={() => setLocation(item.path)}
                       tooltip={item.label}
-                      className={`h-10 transition-all font-normal`}
+                      className={`h-10 transition-all font-medium`}
                     >
                       <item.icon
                         className={`h-4 w-4 ${isActive ? "text-primary" : ""}`}
@@ -255,7 +258,7 @@ function DashboardLayoutContent({
             </div>
           </div>
         )}
-        <main className="flex-1 p-4">{children}</main>
+        <main className="flex-1 bg-[#f8f7f3]">{children}</main>
       </SidebarInset>
     </>
   );

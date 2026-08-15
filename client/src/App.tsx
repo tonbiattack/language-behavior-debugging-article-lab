@@ -5,16 +5,27 @@ import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
+import DashboardLayout from "./components/DashboardLayout";
+import Articles from "./pages/Articles";
+import ArticleEditor from "./pages/ArticleEditor";
+import ArticleDetail from "./pages/ArticleDetail";
+import CacheConsole from "./pages/CacheConsole";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
   return (
-    <Switch>
-      <Route path={"/"} component={Home} />
-      <Route path={"/404"} component={NotFound} />
-      {/* Final fallback route */}
-      <Route component={NotFound} />
-    </Switch>
+    <DashboardLayout>
+      <Switch>
+        <Route path={"/"} component={Home} />
+        <Route path={"/articles"} component={Articles} />
+        <Route path={"/articles/new"} component={ArticleEditor} />
+        <Route path={"/articles/:id/edit"} component={ArticleEditor} />
+        <Route path={"/articles/:id"} component={ArticleDetail} />
+        <Route path={"/cache"} component={CacheConsole} />
+        <Route path={"/404"} component={NotFound} />
+        <Route component={NotFound} />
+      </Switch>
+    </DashboardLayout>
   );
 }
 
